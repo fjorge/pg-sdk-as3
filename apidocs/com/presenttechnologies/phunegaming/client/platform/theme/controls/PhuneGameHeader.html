@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><!-- saved from url=(0014)about:internet --><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="stylesheet" href="../../../../../../../style.css" type="text/css" media="screen"><link rel="stylesheet" href="../../../../../../../print.css" type="text/css" media="print"><link rel="stylesheet" href="../../../../../../../override.css" type="text/css"><meta name="keywords" content="PhuneGameHeader,com.presenttechnologies.phunegaming.client.platform.theme.controls.PhuneGameHeader,DEFAULT_AVATAR_BORDER,DEFAULT_NICKNAME_COLOR,DEFAULT_RANKING_COLOR,DEFAULT_WINNER_COLOR,avatarRadius,delayChangeAvatar,gapNickRank,marginSides,showWithAnim"><title>com.presenttechnologies.phunegaming.client.platform.theme.controls.PhuneGameHeader</title></head><body><script language="javascript" type="text/javascript" src="../../../../../../../asdoc.js"></script><script language="javascript" type="text/javascript" src="../../../../../../../help.js"></script><script language="javascript" type="text/javascript" src="../../../../../../../cookies.js"></script><script language="javascript" type="text/javascript"><!--
+				asdocTitle = 'PhuneGameHeader - Phune Gaming API';
+				var baseRef = '../../../../../../../';
+				window.onload = configPage;
+			--></script>
+<script type="text/javascript">
+			scrollToNameAnchor();
+		</script><table class="titleTable" cellpadding="0" cellspacing="0" id="titleTable" style="display:none"><tr><td class="titleTableTitle" align="left">Phune Gaming</td><td class="titleTableTopNav" align="right"><a href="../../../../../../../package-summary.html" onclick="loadClassListFrame('../../../../../../../all-classes.html')">All Packages</a>&nbsp;|&nbsp;<a href="../../../../../../../class-summary.html" onclick="loadClassListFrame('../../../../../../../all-classes.html')">All Classes</a>&nbsp;|&nbsp;<a href="../../../../../../../all-index-A.html" onclick="loadClassListFrame('../../../../../../../index-list.html')">Index</a>&nbsp;|&nbsp;<a id="framesLink1" href="../../../../../../../index.html?com/presenttechnologies/phunegaming/client/platform/theme/controls/PhuneGameHeader.html&amp;com/presenttechnologies/phunegaming/client/platform/theme/controls/class-list.html">Frames</a><a id="noFramesLink1" style="display:none" href="" onclick="parent.location=document.location"> No Frames </a></td><td class="titleTableLogo" align="right" rowspan="3"><img src="../../../../../../../images/logo.jpg" class="logoImage" alt=" Adobe Logo " title=" Adobe Logo "></td></tr><tr class="titleTableRow2"><td class="titleTableSubTitle" id="subTitle" align="left">PhuneGameHeader</td><td class="titleTableSubNav" id="subNav" align="right"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a>&nbsp;| <a href="#constantSummary">Constants</a></td></tr><tr class="titleTableRow3"><td colspan="3">&nbsp;</td></tr></table><script language="javascript" type="text/javascript" xml:space="preserve">
+				<!--
+				
+					if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("PhuneGameHeader"); titleBar_setSubNav(true,true,false,false,false,false,false,false,true,false,false	,false,false,false,false,false);}	
+				-->
+			</script><div xmlns:fn="http://www.w3.org/2005/xpath-functions" class="MainContent"><table class="classHeaderTable" cellpadding="0" cellspacing="0"><tr><td class="classHeaderTableLabel">Package</td><td><a href="package-detail.html" onclick="javascript:loadClassListFrame('class-list.html')">com.presenttechnologies.phunegaming.client.platform.theme.controls</a></td></tr><tr><td class="classHeaderTableLabel">Class</td><td class="classSignature">public  class  PhuneGameHeader</td></tr><tr><td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">PhuneGameHeader  <img src="../../../../../../../images/inherit-arrow.gif" title="Inheritance" alt="Inheritance" class="inheritArrow"> starling.display.Sprite</td></tr></table><p></p><p></p><p></p> 
+	              <p>The PhuneGameHeader is used on all games to appear the two players, that are playing, on the top of screen game.</p>
+	 
+	              <b>Configure PhuneGameHeader</b>
+	              <p>
+	 The PhuneGameHeader should be passed to GameRoot constructor. You can customize your PhuneGameHeader passing your own params that fits better to your game.
+	 On GameRoot constructor you also have to pass how much pixels of height your PhuneGameHeader will occupied, including top margin you wanna give to your PhuneGameHeader. Is from this size that PhuneGameHeader will be positionated on the screen (PhuneGameHeader + Top Margin).
+	 </p>
+	              <div class="listing"><pre>
+     public function GameRootImpl()
+     {
+         const headerArea:int = UtilService.scaleUnit(225) // Scaled
+         const gameHeader:PhuneGameHeader = new PhuneGameHeader();
+     
+         super(gameHeader, headerArea);
+     }
+     </pre></div>
+	              <p>
+	                 <b>Note:</b> Make sure that all your params are scaled first.
+	 </p>
+	 
+	              <b>Using fonts</b>
+	              <p>
+	 When you have to use some Bitmap Fonts, you usually have to register it using <i>Font.registerFont(FONT_SOURCE)</i>, but here you don't have to care about it, and you shouldn't, to avoid some memory leaks. Instead, pass the Font source classes, on the fourth param of the PhuneGameHeader. You can pass it on Array of Fonts or just one Font class, it's your choice.
+	 </p>
+	 
+	              <p>
+	 Get some fonts <a href="http://www.adobe.com/type/fontfinder/" target="">here</a>.
+	 </p>
+	 
+	              <b>Example</b>
+	              <p>
+	 There is a complete example used on one of our games.
+	 </p>
+	 
+	              <div class="listing"><pre>
+     [Embed(source = "../../../../../assets/game/fonts/PetMe128.ttf", fontName = "Pet Me 128", mimeType = "application/x-font", embedAsCFF="false")]
+     public static var FONT_SOURCE_128:Class;
+     public static var FONT_128:Font = new FONT_SOURCE_128();
+     
+     [Embed(source = "../../../../../assets/game/fonts/PetMe64.ttf", fontName = "Pet Me 64", mimeType = "application/x-font", embedAsCFF="false")]
+     public static var FONT_SOURCE_64:Class;
+     public static var FONT_64:Font = new FONT_SOURCE_64();
+     
+     public function GameRootImpl() 
+     {
+         const headerArea:int = UtilService.scaleUnit(225);
+         const tfNickname:TextFormat = new TextFormat(Assets.FONT_128.fontName, UtilService.scaleUnit(16), 0xFFFFFF);
+         tfNickname.leading = 0;
+         tfNickname.letterSpacing = UtilService.scaleUnitToNumber(0.1);
+         const tfRank:TextFormat = new TextFormat(Assets.FONT_128.fontName, UtilService.scaleUnit(13), 0x63FFFF);
+         tfRank.leading = UtilService.scaleUnit(20);
+         const tfCounter:TextFormat = new TextFormat(Assets.FONT_128.fontName, UtilService.scaleUnit(28));
+         tfCounter.leading = 0;
+         
+         const gameHeader:PhuneGameHeader = new PhuneGameHeader(tfNickname, tfRank, tfCounter,[FONT_SOURCE_128, FONT_SOURCE_64], 0xFFFF00,0x000000);
+         gameHeader.touchable = false;
+         gameHeader.gapNickRank = UtilService.scaleUnit(10);
+         gameHeader.delayChangeAvatar = 1; //Seconds
+         gameHeader.showWithAnim = false;
+     
+         super(gameHeader, headerArea);
+     }</pre></div>
+	 
+	 
+	           <p></p><p><span class="classHeaderTableLabel">See also</span></p><div class="seeAlso"><a href="../../../../../../../com/presenttechnologies/phunegaming/client/platform/view/game/GameRoot.html" target="">GameRoot</a><br/><a href="../../../../../../../com/presenttechnologies/phunegaming/client/platform/service/UtilService.html" target="">UtilService</a></div><br/><hr></div><a name="propertySummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Properties</div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableProperty"><tr><th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#avatarRadius" class="signatureLink">avatarRadius</a> : int<div class="summaryTableDescription">
+		 Radius of avatar.</div></td><td class="summaryTableOwnerCol">PhuneGameHeader</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#delayChangeAvatar" class="signatureLink">delayChangeAvatar</a> : Number<div class="summaryTableDescription">
+		 Delay in seconds to change player playing.</div></td><td class="summaryTableOwnerCol">PhuneGameHeader</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#gapNickRank" class="signatureLink">gapNickRank</a> : int<div class="summaryTableDescription">
+		 Gap value between Nickname and Ranking (First and second line)
+		 </div></td><td class="summaryTableOwnerCol">PhuneGameHeader</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#marginSides" class="signatureLink">marginSides</a> : int<div class="summaryTableDescription">
+		 Margin of avatars on left and right side.</div></td><td class="summaryTableOwnerCol">PhuneGameHeader</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#showWithAnim" class="signatureLink">showWithAnim</a> : Boolean<div class="summaryTableDescription">
+		 If there is any animation on changing player playing.</div></td><td class="summaryTableOwnerCol">PhuneGameHeader</td></tr></table></div><a name="methodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Methods </div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#PhuneGameHeader()" class="signatureLink">PhuneGameHeader</a>(nicknameTextFormat:* = null, rankingTextFormat:* = null, timeCounterTextFormat:* = null, fontClass:* = null, colorWinner:Number, avatarBorderColor:Number, withAnim:Boolean = true)</div><div class="summaryTableDescription">
+		 You can customize your PhuneGameHeader by placing your custom preferences on constructor.</div></td><td class="summaryTableOwnerCol">PhuneGameHeader</td></tr></table></div><a name="constantSummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Constants</div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableConstant"><tr><th>&nbsp;</th><th colspan="2">Constant</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#DEFAULT_AVATAR_BORDER" class="signatureLink">DEFAULT_AVATAR_BORDER</a> : Number = 0x666666<div class="summaryTableDescription">[static] </div></td><td class="summaryTableOwnerCol">PhuneGameHeader</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#DEFAULT_NICKNAME_COLOR" class="signatureLink">DEFAULT_NICKNAME_COLOR</a> : Number = 0x336633<div class="summaryTableDescription">[static] </div></td><td class="summaryTableOwnerCol">PhuneGameHeader</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#DEFAULT_RANKING_COLOR" class="signatureLink">DEFAULT_RANKING_COLOR</a> : Number = 0x514F4B<div class="summaryTableDescription">[static] </div></td><td class="summaryTableOwnerCol">PhuneGameHeader</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#DEFAULT_WINNER_COLOR" class="signatureLink">DEFAULT_WINNER_COLOR</a> : Number = 0xF09600<div class="summaryTableDescription">[static] </div></td><td class="summaryTableOwnerCol">PhuneGameHeader</td></tr></table></div><script language="javascript" type="text/javascript"><!--
+										showHideInherited();
+										--></script><div class="MainContent"><div class="detailSectionHeader">Property Detail</div><a name="propertyDetail"></a><a name="avatarRadius"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">avatarRadius</td><td class="detailHeaderType">property</td></tr></table><div class="detailBody"><code>avatarRadius:int</code><p></p><p></p><p>
+		 Radius of avatar.
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get avatarRadius():int</code><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function set avatarRadius(value:int):void</code><br/></div><a name="propertyDetail"></a><a name="delayChangeAvatar"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">delayChangeAvatar</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>delayChangeAvatar:Number</code><p></p><p></p><p>
+		 Delay in seconds to change player playing. This delay is used when you want to do something after some Move and before changing to the next player playing.  
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get delayChangeAvatar():Number</code><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function set delayChangeAvatar(value:Number):void</code><br/></div><a name="propertyDetail"></a><a name="gapNickRank"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">gapNickRank</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>gapNickRank:int</code><p></p><p></p><p>
+		 Gap value between Nickname and Ranking (First and second line)
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get gapNickRank():int</code><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function set gapNickRank(value:int):void</code><br/></div><a name="propertyDetail"></a><a name="marginSides"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">marginSides</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>marginSides:int</code><p></p><p></p><p>
+		 Margin of avatars on left and right side.
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get marginSides():int</code><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function set marginSides(value:int):void</code><br/></div><a name="propertyDetail"></a><a name="showWithAnim"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">showWithAnim</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>showWithAnim:Boolean</code><p></p><p></p><p>
+		 If there is any animation on changing player playing.
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get showWithAnim():Boolean</code><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function set showWithAnim(value:Boolean):void</code><br/></div><a name="constructorDetail"></a><div class="detailSectionHeader">Constructor Detail</div><a name="PhuneGameHeader()"></a><a name="PhuneGameHeader(any,any,any,any,Number,Number,Boolean)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">PhuneGameHeader</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">Constructor</td></tr></table><div class="detailBody"><code>public function PhuneGameHeader(nicknameTextFormat:* = null, rankingTextFormat:* = null, timeCounterTextFormat:* = null, fontClass:* = null, colorWinner:Number, avatarBorderColor:Number, withAnim:Boolean = true)</code><p></p><p>
+		 You can customize your PhuneGameHeader by placing your custom preferences on constructor. You can also create the PhuneGameHeader by default, letting the platform use the default values.
+		 </p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">nicknameTextFormat</span>:*</code> (default = <code>null</code>)<code></code> &mdash; TextFormat for nickname (this is the same for both players)
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">rankingTextFormat</span>:*</code> (default = <code>null</code>)<code></code> &mdash; TextFormat for ranking (this is the same for both players)
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">timeCounterTextFormat</span>:*</code> (default = <code>null</code>)<code></code> &mdash; TextFormat for time counter (this is the same for both players)
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">fontClass</span>:*</code> (default = <code>null</code>)<code></code> &mdash; You can place an array of Font classes, or just one class. You don't need to (and you shouldn't) register the fonts on your side, platform will care about it for you.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">colorWinner</span>:Number</code> (default = <code>NaN</code>)<code></code> &mdash; Color that will be used on winner label when the match is finished. </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">avatarBorderColor</span>:Number</code> (default = <code>NaN</code>)<code></code> &mdash; Which color will be used on avatar border </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">withAnim</span>:Boolean</code> (default = <code>true</code>)<code></code> &mdash; If the change players will be done with animations 
+		 </td></tr></table></div><div class="detailSectionHeader">Constant Detail</div><a name="constantDetail"></a><a name="DEFAULT_AVATAR_BORDER"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">DEFAULT_AVATAR_BORDER</td><td class="detailHeaderType">Constant</td></tr></table><div class="detailBody"><code>public static const DEFAULT_AVATAR_BORDER:Number = 0x666666</code><p></p></div><a name="constantDetail"></a><a name="DEFAULT_NICKNAME_COLOR"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">DEFAULT_NICKNAME_COLOR</td><td class="detailHeaderType">Constant</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public static const DEFAULT_NICKNAME_COLOR:Number = 0x336633</code><p></p></div><a name="constantDetail"></a><a name="DEFAULT_RANKING_COLOR"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">DEFAULT_RANKING_COLOR</td><td class="detailHeaderType">Constant</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public static const DEFAULT_RANKING_COLOR:Number = 0x514F4B</code><p></p></div><a name="constantDetail"></a><a name="DEFAULT_WINNER_COLOR"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">DEFAULT_WINNER_COLOR</td><td class="detailHeaderType">Constant</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public static const DEFAULT_WINNER_COLOR:Number = 0xF09600</code><p></p></div><br/><br/><hr><br/><p></p><center class="copyright"><footer>© 2000-2013 Present Technologies, Lda</footer><br/>Mon Dec 9 2013, 05:01 PM Z  </center></div></body></html><!--© 2000-2013 Present Technologies, Lda<br/>Mon Dec 9 2013, 05:01 PM Z  -->

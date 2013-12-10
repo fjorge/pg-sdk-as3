@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><!-- saved from url=(0014)about:internet --><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="stylesheet" href="../../../../../../../style.css" type="text/css" media="screen"><link rel="stylesheet" href="../../../../../../../print.css" type="text/css" media="print"><link rel="stylesheet" href="../../../../../../../override.css" type="text/css"><meta name="keywords" content="GameRoot,com.presenttechnologies.phunegaming.client.platform.view.game.GameRoot,me,phuneGameHeader,cancelMatch,close,confirmPlay,doPlay,endMatch,endMatchResult,matchMakingTimeout,matchPrepare,matchStart,onUserDefinedMessage,oponentPlay,ready,sendUserDefinedMessage"><title>com.presenttechnologies.phunegaming.client.platform.view.game.GameRoot</title></head><body><script language="javascript" type="text/javascript" src="../../../../../../../asdoc.js"></script><script language="javascript" type="text/javascript" src="../../../../../../../help.js"></script><script language="javascript" type="text/javascript" src="../../../../../../../cookies.js"></script><script language="javascript" type="text/javascript"><!--
+				asdocTitle = 'GameRoot - Phune Gaming API';
+				var baseRef = '../../../../../../../';
+				window.onload = configPage;
+			--></script>
+<script type="text/javascript">
+			scrollToNameAnchor();
+		</script><table class="titleTable" cellpadding="0" cellspacing="0" id="titleTable" style="display:none"><tr><td class="titleTableTitle" align="left">Phune Gaming</td><td class="titleTableTopNav" align="right"><a href="../../../../../../../package-summary.html" onclick="loadClassListFrame('../../../../../../../all-classes.html')">All Packages</a>&nbsp;|&nbsp;<a href="../../../../../../../class-summary.html" onclick="loadClassListFrame('../../../../../../../all-classes.html')">All Classes</a>&nbsp;|&nbsp;<a href="../../../../../../../all-index-A.html" onclick="loadClassListFrame('../../../../../../../index-list.html')">Index</a>&nbsp;|&nbsp;<a id="framesLink1" href="../../../../../../../index.html?com/presenttechnologies/phunegaming/client/platform/view/game/GameRoot.html&amp;com/presenttechnologies/phunegaming/client/platform/view/game/class-list.html">Frames</a><a id="noFramesLink1" style="display:none" href="" onclick="parent.location=document.location"> No Frames </a></td><td class="titleTableLogo" align="right" rowspan="3"><img src="../../../../../../../images/logo.jpg" class="logoImage" alt=" Adobe Logo " title=" Adobe Logo "></td></tr><tr class="titleTableRow2"><td class="titleTableSubTitle" id="subTitle" align="left">GameRoot</td><td class="titleTableSubNav" id="subNav" align="right"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td></tr><tr class="titleTableRow3"><td colspan="3">&nbsp;</td></tr></table><script language="javascript" type="text/javascript" xml:space="preserve">
+				<!--
+				
+					if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("GameRoot"); titleBar_setSubNav(false,true,false,false,false,false,false,false,true,false,false	,false,false,false,false,false);}	
+				-->
+			</script><div xmlns:fn="http://www.w3.org/2005/xpath-functions" class="MainContent"><table class="classHeaderTable" cellpadding="0" cellspacing="0"><tr><td class="classHeaderTableLabel">Package</td><td><a href="package-detail.html" onclick="javascript:loadClassListFrame('class-list.html')">com.presenttechnologies.phunegaming.client.platform.view.game</a></td></tr><tr><td class="classHeaderTableLabel">Class</td><td class="classSignature">public  class  GameRoot</td></tr><tr><td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">GameRoot  <img src="../../../../../../../images/inherit-arrow.gif" title="Inheritance" alt="Inheritance" class="inheritArrow"> starling.display.Sprite</td></tr></table><p></p><p></p><p></p> 
+	              <p>Base class for the game root. The game developer should extend this class when creating a game.</p>
+	 
+	              <p>
+                  <b>GameRoot usage:</b>
+               </p>
+	 		           <ol>
+	 			             <li>Create a class that extends GameRoot (e.g. GameRootImplementation)</li>
+	 			             <li>Override public functions to handle messages</li>
+	 		           </ol>
+	 
+	              <b>Example:</b>
+	 
+	              <div class="listing"><pre>
+     //It should extends GameRoot. The GameRoot extends a starling.display.Sprite.
+     public class TictactoeImpl extends GameRoot 
+     {
+     
+         //constructor
+         public function TictactoeImpl(){ 
+                 
+             //Create the graphics for game (for example)
+             _theme = new OriginalTheme(this);
+             
+             //call super class with default values. It creates the default header with the players and avatars 
+             super();
+     
+         }
+     
+         //override function to receive players after the match making process
+         override public function matchPrepare(players:Array, me:Number):void
+         {
+             
+             //call the function in extended class
+             super.matchPrepare(players, me);
+             
+             //Create the screen (for example)
+             _playScreen  = new PlayScreen();    
+     
+             //add the screen to display list 
+             addChild(_playScreen);
+     
+             //inform the phune gaming server that is ready to receive moves.
+             ready(true);
+         }
+     
+         //The match will start after receiving this event
+         override public function matchStart(isMe:Boolean):void 
+         {
+             //call the function in extended class
+             super.matchStart(isMe);
+         
+             //start the match in UI (for example)
+             _playScreen.matchStart(isMe);
+         }
+     
+         //received after sending a play to the server. the plays will be evaluated in the server.
+         override public function confirmPlay(success:Boolean, playData:String, evaluationContent:String, nextPlayerId:Number):void 
+         {
+             //call the function in extended class
+             super.confirmPlay(success, playData, evaluationContent, nextPlayerId);
+         
+             //If not succes (invalid move) 
+             if (!success) {
+                 //The UI should retract the move.
+                 _playScreen.retractMove();
+             }
+         }
+     
+         //Received after an opponent play.
+         override public function oponentPlay(playData:String, evaluationcontent:String, playerId:Number, nextPlayerId:Number):void 
+         {
+             //call the function in extended class
+             super.oponentPlay(playData, evaluationcontent, playerId, nextPlayerId);
+         
+             //Convert the move to an object (in this example is in json format)
+             var move:MoveVO = UtilService.jsonDecode(playData, MoveVO);
+         
+             //update UI
+             _playScreen.opponentMove(move.posY + move.posX);
+         }
+     
+         //received in the end of match.
+         override public function endMatchResult(winContent:String, isTie:Boolean, playerWinner:Number):void 
+         {
+             //call the function in extended class
+             super.endMatchResult(winContent, isTie, playerWinner);
+         
+             //If it´s not tie it should update the UI (in this example)
+             if(!isTie){
+                 _playScreen.endMatch(winContent);
+             }
+         }
+     
+         //example function that the UI will call the platform
+         private function doPlay(index:int):void
+         {
+             //Create the move Object
+             var move:MoveVO = new MoveVO();
+             move.className = "Move";
+             move.posX = index % 3;
+             move.posY =  Math.floor(index / 3);
+         
+             //Stringify the object (convert a AS3 object to a json object format)
+             var jsonObject:String = JSON.stringify(move);
+         
+             //Call the GameRootsend doPlay function to send the play to server the play
+             doPlay(jsonObject, true);
+         }
+     }
+     </pre></div>
+	 
+	              <b>Notes:</b>
+	 
+	              <p>The game developers should be responsible to free objects created for the game, by setting objects to null or calling delete</p>
+	 
+	           <p></p><br/><hr></div><a name="propertySummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Properties</div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableProperty"><tr><th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#me" class="signatureLink">me</a> : Number<div class="summaryTableDescription">
+		 My player id.</div></td><td class="summaryTableOwnerCol">GameRoot</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#phuneGameHeader" class="signatureLink">phuneGameHeader</a> : <a href="../../../../../../../com/presenttechnologies/phunegaming/client/platform/theme/controls/PhuneGameHeader.html">PhuneGameHeader</a><div class="summaryTableDescription">
+		 The header of the game.</div></td><td class="summaryTableOwnerCol">GameRoot</td></tr></table></div><a name="methodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Methods </div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#GameRoot()" class="signatureLink">GameRoot</a>(phuneGameHeader:<a href="../../../../../../../com/presenttechnologies/phunegaming/client/platform/theme/controls/PhuneGameHeader.html">PhuneGameHeader</a> = null, headerArea:Number = 0)</div><div class="summaryTableDescription">
+		 Constructor.</div></td><td class="summaryTableOwnerCol">GameRoot</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#confirmPlay()" class="signatureLink">confirmPlay</a>(success:Boolean, playData:String, evaluationcontent:String, nextPlayerId:Number):void</div><div class="summaryTableDescription">
+		 Received after sending a play.</div></td><td class="summaryTableOwnerCol">GameRoot</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#endMatch()" class="signatureLink">endMatch</a>(endMatchData:String):void</div><div class="summaryTableDescription">
+		 Received when a end match is received
+		 
+		 </div></td><td class="summaryTableOwnerCol">GameRoot</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#endMatchResult()" class="signatureLink">endMatchResult</a>(winContent:String, isTie:Boolean, playerWinner:Number):void</div><div class="summaryTableDescription">
+		 Received when a final result of a game in a normal play.</div></td><td class="summaryTableOwnerCol">GameRoot</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#matchMakingTimeout()" class="signatureLink">matchMakingTimeout</a>(hasBot:Boolean):void</div><div class="summaryTableDescription">
+		 Received when a timeout occurred and the platform request to user a decision.</div></td><td class="summaryTableOwnerCol">GameRoot</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#matchPrepare()" class="signatureLink">matchPrepare</a>(players:Array, me:Number):void</div><div class="summaryTableDescription">
+		 Received when a match making is occurred.</div></td><td class="summaryTableOwnerCol">GameRoot</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#matchStart()" class="signatureLink">matchStart</a>(isMe:Boolean):void</div><div class="summaryTableDescription">
+		 Received for first move
+		 
+		 </div></td><td class="summaryTableOwnerCol">GameRoot</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#onUserDefinedMessage()" class="signatureLink">onUserDefinedMessage</a>(isMe:Boolean, content:*, result:*):void</div><div class="summaryTableDescription">
+		 Receive messages specific to game (other then move).</div></td><td class="summaryTableOwnerCol">GameRoot</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#oponentPlay()" class="signatureLink">oponentPlay</a>(playData:String, evaluationcontent:String, playerId:Number, nextPlayerId:Number):void</div><div class="summaryTableDescription">
+		 Received when a play from an opponent is received.</div></td><td class="summaryTableOwnerCol">GameRoot</td></tr></table></div><a name="protectedMethodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Protected Methods </div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableProtectedMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#cancelMatch()" class="signatureLink">cancelMatch</a>():void</div><div class="summaryTableDescription">
+		 Dispatched to a explicit cancel of a match.</div></td><td class="summaryTableOwnerCol">GameRoot</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#close()" class="signatureLink">close</a>(reason:String = null):void</div><div class="summaryTableDescription">
+		 Dispatched when the game is ready to be closed.</div></td><td class="summaryTableOwnerCol">GameRoot</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#doPlay()" class="signatureLink">doPlay</a>(playData:String, isPlay:Boolean):void</div><div class="summaryTableDescription">
+		 Dispatched when the game needs to do a play.</div></td><td class="summaryTableOwnerCol">GameRoot</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#ready()" class="signatureLink">ready</a>(ready:Boolean):void</div><div class="summaryTableDescription">
+		 Dispatched when the game is ready to be shown (normally after configuration).</div></td><td class="summaryTableOwnerCol">GameRoot</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#sendUserDefinedMessage()" class="signatureLink">sendUserDefinedMessage</a>(content:*, publicAnswer:Boolean = false, requiresConcurrencyControl:Boolean = true):void</div><div class="summaryTableDescription">
+		 Send messages specific to game (other then move).</div></td><td class="summaryTableOwnerCol">GameRoot</td></tr></table></div><script language="javascript" type="text/javascript"><!--
+										showHideInherited();
+										--></script><div class="MainContent"><div class="detailSectionHeader">Property Detail</div><a name="propertyDetail"></a><a name="me"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">me</td><td class="detailHeaderType">property</td></tr></table><div class="detailBody"><code>public var me:Number</code><p></p><p></p><p>
+		 My player id.
+		 </p></div><a name="propertyDetail"></a><a name="phuneGameHeader"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">phuneGameHeader</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>phuneGameHeader:<a href="../../../../../../../com/presenttechnologies/phunegaming/client/platform/theme/controls/PhuneGameHeader.html">PhuneGameHeader</a></code><p></p><p></p><p>
+		 The header of the game. It can use de generic implementation of the Phunegaming or extend it.
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get phuneGameHeader():<a href="../../../../../../../com/presenttechnologies/phunegaming/client/platform/theme/controls/PhuneGameHeader.html">PhuneGameHeader</a></code><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function set phuneGameHeader(value:<a href="../../../../../../../com/presenttechnologies/phunegaming/client/platform/theme/controls/PhuneGameHeader.html">PhuneGameHeader</a>):void</code><br/></div><a name="constructorDetail"></a><div class="detailSectionHeader">Constructor Detail</div><a name="GameRoot()"></a><a name="GameRoot(com.presenttechnologies.phunegaming.client.platform.theme.controls.PhuneGameHeader,Number)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">GameRoot</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">Constructor</td></tr></table><div class="detailBody"><code>public function GameRoot(phuneGameHeader:<a href="../../../../../../../com/presenttechnologies/phunegaming/client/platform/theme/controls/PhuneGameHeader.html">PhuneGameHeader</a> = null, headerArea:Number = 0)</code><p></p><p>
+		 Constructor.
+		 
+		 </p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">phuneGameHeader</span>:<a href="../../../../../../../com/presenttechnologies/phunegaming/client/platform/theme/controls/PhuneGameHeader.html">PhuneGameHeader</a></code> (default = <code>null</code>)<code></code> &mdash; The instance of the game header. If it´s not defined (null) it will assume the default implementation with the default values.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">headerArea</span>:Number</code> (default = <code>0</code>)<code></code> &mdash; The area defined in the top. The header wil be centered in this area.
+		 </td></tr></table></div><a name="methodDetail"></a><div class="detailSectionHeader">Method Detail</div><a name="cancelMatch()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">cancelMatch</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td></tr></table><div class="detailBody"><code> protected function cancelMatch():void</code><p></p><p></p><p>
+		 Dispatched to a explicit cancel of a match.
+		 </p></div><a name="close()"></a><a name="close(String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">close</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> protected function close(reason:String = null):void</code><p></p><p></p><p>
+		 Dispatched when the game is ready to be closed. The Game devs should not override this method
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">reason</span>:String</code> (default = <code>null</code>)<code></code> &mdash; The reason (if any) to be closed. </td></tr></table></p></div><a name="confirmPlay()"></a><a name="confirmPlay(Boolean,String,String,Number)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">confirmPlay</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function confirmPlay(success:Boolean, playData:String, evaluationcontent:String, nextPlayerId:Number):void</code><p></p><p></p><p>
+		 Received after sending a play. It will be evaluated in the server and a response is received.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">success</span>:Boolean</code> &mdash; If the play was a success.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">playData</span>:String</code> &mdash; The move after evaluatition from the server (can be changed from the original move sent).
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">evaluationcontent</span>:String</code> &mdash; The content evaluated in the server.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">nextPlayerId</span>:Number</code> &mdash; Confirm if it´s your trun by checking <code>if (nextPlayerId==me)</code>.
+		 </td></tr></table></p></div><a name="doPlay()"></a><a name="doPlay(String,Boolean)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">doPlay</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> protected function doPlay(playData:String, isPlay:Boolean):void</code><p></p><p></p><p>
+		 Dispatched when the game needs to do a play. The Game devs should not override this method
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">playData</span>:String</code> &mdash; The object of play defined as a string (eg. JSON).
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">isPlay</span>:Boolean</code> &mdash; If is a play to be send to the server (delivery guarantee) or if it´s a peer to peer mesage to be sent to the opponents (no delivery guarantee).
+		 </td></tr></table></p></div><a name="endMatch()"></a><a name="endMatch(String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">endMatch</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function endMatch(endMatchData:String):void</code><p></p><p></p><p>
+		 Received when a end match is received
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">endMatchData</span>:String</code> &mdash; the end match object defined as a string (eg. JSON)
+		 </td></tr></table></p></div><a name="endMatchResult()"></a><a name="endMatchResult(String,Boolean,Number)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">endMatchResult</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function endMatchResult(winContent:String, isTie:Boolean, playerWinner:Number):void</code><p></p><p></p><p>
+		 Received when a final result of a game in a normal play.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">winContent</span>:String</code> &mdash; The content sent from the server to the game.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">isTie</span>:Boolean</code> &mdash; Tie result.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">playerWinner</span>:Number</code> &mdash; The winner player id (if it´s not a tie).
+		 </td></tr></table></p></div><a name="matchMakingTimeout()"></a><a name="matchMakingTimeout(Boolean)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">matchMakingTimeout</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function matchMakingTimeout(hasBot:Boolean):void</code><p></p><p></p><p>
+		 Received when a timeout occurred and the platform request to user a decision.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">hasBot</span>:Boolean</code> &mdash; If the game has a bot to be played as standalone
+		 </td></tr></table></p></div><a name="matchPrepare()"></a><a name="matchPrepare(Array,Number)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">matchPrepare</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function matchPrepare(players:Array, me:Number):void</code><p></p><p></p><p>
+		 Received when a match making is occurred. The game receives the list of players. After UI update the game should call the app ready.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">players</span>:Array</code> &mdash; The list of players [com.presenttechnologies.phunegaming.client.platform.model.vo.PlayerVO] in the match.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">me</span>:Number</code> &mdash; My player id.
+		 
+		 </td></tr></table></p><p><span class="label">See also</span></p><div class="seeAlso"><a href="../../../../../../../com/presenttechnologies/phunegaming/client/platform/model/vo/PlayerVO.html" target="">PlayerVO</a></div></div><a name="matchStart()"></a><a name="matchStart(Boolean)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">matchStart</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function matchStart(isMe:Boolean):void</code><p></p><p></p><p>
+		 Received for first move
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">isMe</span>:Boolean</code> &mdash; If it´s my turn to play.
+		 </td></tr></table></p></div><a name="onUserDefinedMessage()"></a><a name="onUserDefinedMessage(Boolean,any,any)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">onUserDefinedMessage</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function onUserDefinedMessage(isMe:Boolean, content:*, result:*):void</code><p></p><p></p><p>
+		 Receive messages specific to game (other then move).
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">isMe</span>:Boolean</code> &mdash; If it´s a message from my user 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">content</span>:*</code> &mdash; The content received
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">result</span>:*</code> &mdash; The result received
+		 </td></tr></table></p></div><a name="oponentPlay()"></a><a name="oponentPlay(String,String,Number,Number)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">oponentPlay</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function oponentPlay(playData:String, evaluationcontent:String, playerId:Number, nextPlayerId:Number):void</code><p></p><p></p><p>
+		 Received when a play from an opponent is received.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">playData</span>:String</code> &mdash; The play object defined as a string (eg. JSON)
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">evaluationcontent</span>:String</code> &mdash; The player responsible for the play.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">playerId</span>:Number</code></td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">nextPlayerId</span>:Number</code></td></tr></table></p></div><a name="ready()"></a><a name="ready(Boolean)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">ready</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> protected function ready(ready:Boolean):void</code><p></p><p></p><p>
+		 Dispatched when the game is ready to be shown (normally after configuration). The Game devs should not override this method
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">ready</span>:Boolean</code> &mdash; If the game is ready
+		 </td></tr></table></p></div><a name="sendUserDefinedMessage()"></a><a name="sendUserDefinedMessage(any,Boolean,Boolean)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">sendUserDefinedMessage</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> protected function sendUserDefinedMessage(content:*, publicAnswer:Boolean = false, requiresConcurrencyControl:Boolean = true):void</code><p></p><p></p><p>
+		 Send messages specific to game (other then move). The Game devs should not override this method
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">content</span>:*</code> &mdash; The content defined by the game (eg. JSON).
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">publicAnswer</span>:Boolean</code> (default = <code>false</code>)<code></code> &mdash; If the response is sent to all the users in the match or only to the originator. </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">requiresConcurrencyControl</span>:Boolean</code> (default = <code>true</code>)<code></code> &mdash; If requires a synchronization in the server. </td></tr></table></p></div><br/><br/><hr><br/><p></p><center class="copyright"><footer>© 2000-2013 Present Technologies, Lda</footer><br/>Mon Dec 9 2013, 05:01 PM Z  </center></div></body></html><!--© 2000-2013 Present Technologies, Lda<br/>Mon Dec 9 2013, 05:01 PM Z  -->
